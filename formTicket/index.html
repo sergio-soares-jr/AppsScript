@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  </head>
+
+  <style>
+
+    #titulo{
+      margin-top: 1em;
+    }
+
+    #main{
+      margin-top: 2em;
+    }
+
+    #icarro{
+      margin-right: 8px;
+    }
+
+    #ilitros{
+      margin-right: 8px;
+    }
+
+    #ivalor{
+      margin-right: 8px;
+    }
+
+
+  </style>
+
+  <body>
+    
+    <div class="container text-center" id="titulo">
+      <h2>CADASTRE AQUI O TICKET 👇</h2>
+    </div>
+    
+    <div class="container text-center" id="main">
+
+      
+
+      <div class="form-floating mb-3">
+        <input type="date" class="form-control" id="data" placeholder="Data">
+        <label for="data">Data do abastecimento:</label>
+      </div>
+
+      <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id='placa'>
+        <option value='' selected>Placa do carro</option>
+        <option value="NQV2717">NQV2717</option>
+        <option value="KPA6691">KPA6691</option>
+        <option value="ASL8428">ASL8428</option>
+        <option value="AQZ8093">AQZ8093</option>
+        <option value="OEM4482">OEM4482</option>
+      </select>
+      
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="modelo" readonly>
+        <label for="modelo"><i class="bi bi-car-front-fill" id='icarro'></i>Modelo:</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="litros">
+        <label for="litros"><i class="bi bi-droplet-fill" id="ilitros"></i>Litros:</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input type="number" class="form-control" id="valor">
+        <label for="valor"><i class="bi bi-cash-coin"id='ivalor'></i>Valor:</label>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-lg" id='btn'>Cadastrar</button>
+
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+    <script>
+
+    function atualizarModelo() {
+      let placa = document.getElementById("placa").value;
+      let modelo = document.getElementById("modelo");
+      
+      switch (placa) {
+        case "NQV2717":
+          modelo.value = "BLAZER";
+          break;
+        case "KPA6691":
+          modelo.value = "DUCATO";
+          break;
+        case "ASL8428":
+          modelo.value = "LÍNEA";
+          break;
+        case "AQZ8093":
+          modelo.value = "SENTRA";
+          break;
+        case "OEM4482":
+          modelo.value = "TRITON";
+          break;
+        default:
+          modelo.value = "";
+      }
+    }
+
+    let placa = document.getElementById("placa");
+    placa.addEventListener("change", atualizarModelo);
+
+    let data = document.getElementById("data");
+    let modelo = document.getElementById("modelo");
+    let litros = document.getElementById("litros");
+    let valor = document.getElementById("valor");
+
+    document.getElementById('btn').addEventListener('click',adicionar);
+
+    function adicionar(){
+      let dados ={
+        data: data.value,
+        placa: placa.value,
+        modelo: modelo.value,
+        litros: formataNumero(litros.value),
+        valor: formataNumero(valor.value)
+        };
+
+      if(data.value === '' || placa.value === '' || litros.value === '' || valor.value === ''){
+        alert("Preencha todos os campos!");
+        return false;
+      }
+      
+      
+      google.script.run.withSuccessHandler(cadastradoSucesso).adicionarDados(dados);
+
+      data.value='';
+      placa.value='';
+      modelo.value='';
+      litros.value='';
+      valor.value='';
+
+    }
+
+    //Não funcionou
+    function formataData(data){
+      let dataFormatada = new Date(data);
+      return dataFormatada.toLocaleDateString('pt-BR');
+    }
+
+    function formataNumero(numero){
+      return numero.toString().replace(".", ",");
+    }
+
+    function cadastradoSucesso(){
+      alert("Cadastro efetuado com sucesso!");
+    }
+
+
+
+
+
+
+
+    </script>
+
+  </body>
+</html>
